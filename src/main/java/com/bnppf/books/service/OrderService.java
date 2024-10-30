@@ -2,9 +2,14 @@ package com.bnppf.books.service;
 
 import com.bnppf.books.web.support.BasketDTO;
 import com.bnppf.books.web.support.BasketItemDTO;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Service
 public class OrderService {
 
     private static final double BOOK_PRICE = 50.0;
@@ -12,26 +17,45 @@ public class OrderService {
 
     public double placeOrder(BasketDTO basket) {
         List<BasketItemDTO> items = basket.items();
-
         if (items.isEmpty()) {
             return 0;
         }
+        return findBestPrice(items);
+    }
 
-        double totalPrice = 0;
-
-        // try to get throw all available books - greedy way
-        while (!items.isEmpty()) {
-            // Calculate the price based on the current size of quantities
-            int currentSize = items.size();
-            double currentTotal = currentSize * BOOK_PRICE * DISCOUNTS[currentSize];
-            totalPrice += currentTotal;
-
-            items = items.stream()
-                    .map(item -> new BasketItemDTO(item.bookId(), item.quantity() - 1))
-                    .filter(item -> item.quantity() > 0) // Keep only items with quantity > 0
-                    .toList();
+    public double findBestPrice(List<BasketItemDTO> items) {
+        if (items.isEmpty()) {
+            return 0;
         }
+        double minPrice = Double.MAX_VALUE;
 
-        return totalPrice;
+        // all possible combinations of book sets + avoid recalculation
+        Set<List<BasketItemDTO>> seenSet = new HashSet<>();
+
+        for (int setSize = 1; setSize <= items.size(); setSize++) {
+            List<BasketItemDTO> remainingItems = new ArrayList<>(items);
+
+            // Remove one book from each different book available up to setSize
+            for (int i = 0; i < setSize; i++) {
+                if (remainingItems.size() > i && remainingItems.get(i).quantity() > 0) {
+                    BasketItemDTO updatedItem = new BasketItemDTO(
+                            remainingItems.get(i).bookId(),
+                            remainingItems.get(i).quantity() - 1
+                    );
+                    remainingItems.set(i, updatedItem);
+                }
+            }
+            // Remove items with zero quantity
+            remainingItems.removeIf(item -> item.quantity() == 0);
+
+            if (!seenSet.contains(remainingItems)) {
+                seenSet.add(remainingItems);
+                double setPrice = setSize * BOOK_PRICE * DISCOUNTS[setSize];
+                double remainingPrice = findBestPrice(remainingItems);
+                minPrice = Math.min(minPrice, setPrice + remainingPrice);
+            }
+
+        }
+        return minPrice;
     }
 }
