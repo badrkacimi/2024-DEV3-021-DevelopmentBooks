@@ -38,4 +38,10 @@ public class PricingServiceTest {
         double price = pricingService.calculatePrice(new int[]{1, 1, 1, 1, 1});
         assertEquals(187.5, price);
     }
+
+    @Test
+    void calculatePrice_DifferentBooks_AppliesDiscount() {
+        double price = pricingService.calculatePrice(new int[]{2, 2, 2, 1, 1});
+        assertEquals(322.5, price);
+    }
 }
