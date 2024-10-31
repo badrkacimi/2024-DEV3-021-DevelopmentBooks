@@ -18,7 +18,7 @@ public class OrderService {
 
     public double placeOrder(BasketDTO basket) {
         List<BasketItemDTO> items = basket.items();
-        if (items.isEmpty()) {
+        if (items.isEmpty() || items.stream().mapToDouble(BasketItemDTO::quantity).sum() == 0) {
             throw new InvalidRequestException("Basket cannot be empty.");
         }
         if (items.size() != items.stream().map(BasketItemDTO::bookId).distinct().count()) {

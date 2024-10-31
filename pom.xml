@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.bnppf</groupId>
-    <artifactId>books</artifactId>
+    <artifactId>bookstore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>books</name>
+    <name>bookstore</name>
     <description>Development Books kata</description>
     <url/>
     <licenses>
