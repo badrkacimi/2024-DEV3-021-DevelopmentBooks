@@ -21,6 +21,9 @@ public class OrderService {
         if (items.isEmpty()) {
             throw new InvalidRequestException("Basket cannot be empty.");
         }
+        if (items.size() != items.stream().map(BasketItemDTO::bookId).distinct().count()) {
+            throw new InvalidRequestException("Duplicate books in the basket.");
+        }
         if (items.stream().map(BasketItemDTO::quantity).anyMatch(q -> q < 0)) {
             throw new InvalidRequestException("Book quantity cannot be negative.");
         }

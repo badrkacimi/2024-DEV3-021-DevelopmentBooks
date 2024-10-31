@@ -103,4 +103,17 @@ public class OrderServiceTest {
 
         assertEquals("Book quantity cannot be negative.", thrownException.getMessage());
     }
+
+    @Test
+    public void calculatePrice_ShouldThrowException_WhenDuplicateBooks() {
+        BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
+        basketDTO.items().add(new BasketItemDTO(1L, 2));
+        basketDTO.items().add(new BasketItemDTO(1L, 3));
+
+        InvalidRequestException thrownException = assertThrows(
+                InvalidRequestException.class,
+                () -> OrderService.placeOrder(basketDTO));
+
+        assertEquals("Duplicate books in the basket.", thrownException.getMessage());
+    }
 }
