@@ -32,5 +32,3 @@ book-store.postman_collection.json
 # Visualize & interact with the API's endpoints :
 
 URL: http://localhost:8080/swagger-ui/index.html
-
-* Database implementation is excluded for simplicity, as it’s not necessary for the kata requirements
