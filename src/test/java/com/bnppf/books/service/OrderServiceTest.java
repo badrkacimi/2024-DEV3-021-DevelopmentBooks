@@ -19,16 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OrderServiceTest {
 
     @InjectMocks
-    OrderService OrderService;
+    private OrderService OrderService;
 
     @Test
     public void calculatePrice_SingleBook_NoDiscount() {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 1));
 
-        double price = OrderService.placeOrder(basketDTO);
+        double total = OrderService.placeOrder(basketDTO);
 
-        assertEquals(50.0, price, "Price for a single book should be 50.0");
+        assertEquals(50.0, total, "Price for a single book should be 50.0");
     }
 
     @Test
@@ -36,9 +36,9 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
 
-        double price = OrderService.placeOrder(basketDTO);
+        double total = OrderService.placeOrder(basketDTO);
 
-        assertEquals(100.0, price, "Price for a two same book should be 100.0");
+        assertEquals(100.0, total, "Price for a two same book should be 100.0");
 
     }
 
@@ -48,9 +48,9 @@ public class OrderServiceTest {
         basketDTO.items().add(new BasketItemDTO(1L, 1));
         basketDTO.items().add(new BasketItemDTO(2L, 1));
 
-        double price = OrderService.placeOrder(basketDTO);
+        double total = OrderService.placeOrder(basketDTO);
 
-        assertEquals(95, price);
+        assertEquals(95, total);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class OrderServiceTest {
         basketDTO.items().add(new BasketItemDTO(4L, 1));
         basketDTO.items().add(new BasketItemDTO(5L, 1));
 
-        double price = OrderService.placeOrder(basketDTO);
-        assertEquals(187.5, price);
+        double total = OrderService.placeOrder(basketDTO);
+        assertEquals(187.5, total);
     }
 
     @Test
@@ -75,9 +75,9 @@ public class OrderServiceTest {
         basketDTO.items().add(new BasketItemDTO(4L, 1));
         basketDTO.items().add(new BasketItemDTO(5L, 1));
 
-        double price = OrderService.placeOrder(basketDTO);
+        double total = OrderService.placeOrder(basketDTO);
 
-        assertEquals(320, price);
+        assertEquals(320, total);
     }
 
     @Test
