@@ -21,6 +21,6 @@ public class OrderController {
     @PostMapping("/place")
     public ResponseEntity<Double> placeOrder(@RequestBody BasketDTO basket) {
         double total = orderService.placeOrder(basket);
-        return ResponseEntity.status(201).body(total);
+        return ResponseEntity.ok().body(total);
     }
 }

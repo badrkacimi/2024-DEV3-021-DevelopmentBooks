@@ -1,5 +1,6 @@
 package com.bnppf.books.service;
 
+import com.bnppf.books.web.exceptions.InvalidRequestException;
 import com.bnppf.books.web.support.BasketDTO;
 import com.bnppf.books.web.support.BasketItemDTO;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ public class OrderService {
     public double placeOrder(BasketDTO basket) {
         List<BasketItemDTO> items = basket.items();
         if (items.isEmpty()) {
-            return 0;
+            throw new InvalidRequestException("Basket cannot be empty.");
+        }
+        if (items.stream().map(BasketItemDTO::quantity).anyMatch(q -> q > 0)) {
+            throw new InvalidRequestException("Book quantity cannot be negative.");
         }
         return findBestPrice(items);
     }
