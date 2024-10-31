@@ -3,6 +3,8 @@
 * Java 21 Spring boot 3.3.5.RELEASE.
 * TDD approach
 * Docker for containerize the application.
+* H2 as in-memory database.
+* Lombok to minimize the boilerplate code
 
 # Build project
 

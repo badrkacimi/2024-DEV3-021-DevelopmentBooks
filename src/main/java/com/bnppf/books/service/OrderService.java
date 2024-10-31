@@ -1,8 +1,10 @@
 package com.bnppf.books.service;
 
+import com.bnppf.books.domain.repositories.BookRepository;
 import com.bnppf.books.web.exceptions.InvalidRequestException;
 import com.bnppf.books.web.support.BasketDTO;
 import com.bnppf.books.web.support.BasketItemDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,13 +13,21 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-
     private static final double BOOK_PRICE = 50.0;
     private static final double[] DISCOUNTS = {0, 1.0, 0.95, 0.9, 0.8, 0.75};
+    private final BookRepository bookRepository;
 
     public double placeOrder(BasketDTO basket) {
         List<BasketItemDTO> items = basket.items();
+
+        for (BasketItemDTO basketItemDTO : items) {
+            var book = bookRepository.findById(basketItemDTO.bookId());
+            if (book.isEmpty()) {
+                throw new InvalidRequestException("Book unavailable. Id: " + basketItemDTO.bookId());
+            }
+        }
         if (items.isEmpty() || items.stream().mapToDouble(BasketItemDTO::quantity).sum() == 0) {
             throw new InvalidRequestException("Basket cannot be empty.");
         }

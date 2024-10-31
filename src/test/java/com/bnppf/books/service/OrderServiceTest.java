@@ -1,31 +1,38 @@
 package com.bnppf.books.service;
 
 
+import com.bnppf.books.domain.entities.Book;
+import com.bnppf.books.domain.repositories.BookRepository;
 import com.bnppf.books.web.exceptions.InvalidRequestException;
 import com.bnppf.books.web.support.BasketDTO;
 import com.bnppf.books.web.support.BasketItemDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
-
     @InjectMocks
     private OrderService OrderService;
+    @Mock
+    private BookRepository bookRepository;
 
     @Test
     public void calculatePrice_SingleBook_NoDiscount() {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 1));
-
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
         double total = OrderService.placeOrder(basketDTO);
 
         assertEquals(50.0, total, "Price for a single book should be 50.0");
@@ -35,6 +42,7 @@ public class OrderServiceTest {
     public void calculatePrice_TwoSameBooks_NoDiscount() {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         double total = OrderService.placeOrder(basketDTO);
 
@@ -47,6 +55,7 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 1));
         basketDTO.items().add(new BasketItemDTO(2L, 1));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         double total = OrderService.placeOrder(basketDTO);
 
@@ -61,6 +70,7 @@ public class OrderServiceTest {
         basketDTO.items().add(new BasketItemDTO(3L, 1));
         basketDTO.items().add(new BasketItemDTO(4L, 1));
         basketDTO.items().add(new BasketItemDTO(5L, 1));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         double total = OrderService.placeOrder(basketDTO);
         assertEquals(187.5, total);
@@ -74,6 +84,7 @@ public class OrderServiceTest {
         basketDTO.items().add(new BasketItemDTO(3L, 2));
         basketDTO.items().add(new BasketItemDTO(4L, 1));
         basketDTO.items().add(new BasketItemDTO(5L, 1));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         double total = OrderService.placeOrder(basketDTO);
 
@@ -96,6 +107,7 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
         basketDTO.items().add(new BasketItemDTO(2L, -3));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         InvalidRequestException thrownException = assertThrows(
                 InvalidRequestException.class,
@@ -109,6 +121,7 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
         basketDTO.items().add(new BasketItemDTO(1L, 3));
+        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         InvalidRequestException thrownException = assertThrows(
                 InvalidRequestException.class,

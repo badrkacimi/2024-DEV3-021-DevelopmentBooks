@@ -1,39 +1,39 @@
 {
-	"info": {
-		"_postman_id": "2fb9b415-bddd-4b82-9812-445e5343c2cf",
-		"name": "book-store",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6902873"
-	},
-	"item": [
-		{
-			"name": "http://localhost:8080/orders/place",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"orderDate\": \"2024-10-31T11:53:27.478Z\",\n  \"items\": [\n    {\n      \"bookId\": 1,\n      \"quantity\": 2\n    },\n    {\n      \"bookId\": 2,\n      \"quantity\": 2\n    },\n        {\n      \"bookId\": 3,\n      \"quantity\": 2\n    },\n    {\n      \"bookId\": 4,\n      \"quantity\": 1\n    },\n    {\n      \"bookId\": 5,\n      \"quantity\": 1\n    }\n  ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/orders/place",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"orders",
-						"place"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "2fb9b415-bddd-4b82-9812-445e5343c2cf",
+    "name": "book-store",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6902873"
+  },
+  "item": [
+    {
+      "name": "http://localhost:8080/orders/place",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orderDate\": \"2024-10-31T11:53:27.478Z\",\n  \"items\": [\n    {\n      \"bookId\": 1,\n      \"quantity\": 2\n    },\n    {\n      \"bookId\": 2,\n      \"quantity\": 2\n    },\n        {\n      \"bookId\": 3,\n      \"quantity\": 2\n    },\n    {\n      \"bookId\": 4,\n      \"quantity\": 1\n    },\n    {\n      \"bookId\": 5,\n      \"quantity\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/orders/place",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "orders",
+            "place"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }
