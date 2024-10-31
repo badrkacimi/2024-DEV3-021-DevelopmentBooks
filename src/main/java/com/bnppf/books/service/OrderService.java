@@ -21,7 +21,7 @@ public class OrderService {
         if (items.isEmpty()) {
             throw new InvalidRequestException("Basket cannot be empty.");
         }
-        if (items.stream().map(BasketItemDTO::quantity).anyMatch(q -> q > 0)) {
+        if (items.stream().map(BasketItemDTO::quantity).anyMatch(q -> q < 0)) {
             throw new InvalidRequestException("Book quantity cannot be negative.");
         }
         return findBestPrice(items);
