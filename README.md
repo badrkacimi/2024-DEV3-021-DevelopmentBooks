@@ -29,6 +29,17 @@ You can import all the apis in Postman:
 book-store.postman_collection.json
 ```
 
+Available books Ids range: 1-5:
+
+```
+Id 1 [Clean Code (Robert Martin, 2008)]
+Id 2 [The Clean Coder (Robert Martin, 2011)]
+Id 3 [Clean Architecture (Robert Martin, 2017)]
+Id 4 [Test Driven Development by Example (Kent Beck, 2003)]
+Id 5 [Working Effectively With Legacy Code (Michael C. Feathers, 2004)]
+```
+
+
 # Visualize & interact with the API's endpoints :
 
 URL: http://localhost:8080/swagger-ui/index.html
