@@ -20,14 +20,14 @@ public class OrderService {
     private final BookRepository bookRepository;
 
     public double placeOrder(BasketDTO basket) {
+        validateBasket(basket);
+        checkBookAvailability(basket);
+        return calculateBestPrice(basket.items());
+    }
+
+    private void validateBasket(BasketDTO basket) {
         List<BasketItemDTO> items = basket.items();
 
-        for (BasketItemDTO basketItemDTO : items) {
-            var book = bookRepository.findById(basketItemDTO.bookId());
-            if (book.isEmpty()) {
-                throw new InvalidRequestException("Book unavailable. Id: " + basketItemDTO.bookId());
-            }
-        }
         if (items.isEmpty() || items.stream().mapToDouble(BasketItemDTO::quantity).sum() == 0) {
             throw new InvalidRequestException("Basket cannot be empty.");
         }
@@ -37,42 +37,48 @@ public class OrderService {
         if (items.stream().map(BasketItemDTO::quantity).anyMatch(q -> q < 0)) {
             throw new InvalidRequestException("Book quantity cannot be negative.");
         }
-        return findBestPrice(items);
     }
 
-    public double findBestPrice(List<BasketItemDTO> items) {
+    private void checkBookAvailability(BasketDTO basket) {
+        for (BasketItemDTO basketItemDTO : basket.items()) {
+            var book = bookRepository.findById(basketItemDTO.bookId());
+            if (book.isEmpty()) {
+                throw new InvalidRequestException("Book unavailable. Id: " + basketItemDTO.bookId());
+            }
+        }
+    }
+
+    private double calculateBestPrice(List<BasketItemDTO> items) {
         if (items.isEmpty()) {
             return 0;
         }
         double minPrice = Double.MAX_VALUE;
-
-        // all possible combinations of book sets + avoid recalculation
         Set<List<BasketItemDTO>> seenSet = new HashSet<>();
 
         for (int setSize = 1; setSize <= items.size(); setSize++) {
             List<BasketItemDTO> remainingItems = new ArrayList<>(items);
+            createBookSet(remainingItems, setSize);
 
-            // Remove one book from each different book available up to setSize
-            for (int i = 0; i < setSize; i++) {
-                if (remainingItems.size() > i && remainingItems.get(i).quantity() > 0) {
-                    BasketItemDTO updatedItem = new BasketItemDTO(
-                            remainingItems.get(i).bookId(),
-                            remainingItems.get(i).quantity() - 1
-                    );
-                    remainingItems.set(i, updatedItem);
-                }
-            }
-            // Remove items with zero quantity
             remainingItems.removeIf(item -> item.quantity() == 0);
-
             if (!seenSet.contains(remainingItems)) {
                 seenSet.add(remainingItems);
                 double setPrice = setSize * BOOK_PRICE * DISCOUNTS[setSize];
-                double remainingPrice = findBestPrice(remainingItems);
+                double remainingPrice = calculateBestPrice(remainingItems);
                 minPrice = Math.min(minPrice, setPrice + remainingPrice);
             }
-
         }
         return minPrice;
+    }
+
+    private void createBookSet(List<BasketItemDTO> items, int setSize) {
+        for (int i = 0; i < setSize; i++) {
+            if (items.size() > i && items.get(i).quantity() > 0) {
+                BasketItemDTO updatedItem = new BasketItemDTO(
+                        items.get(i).bookId(),
+                        items.get(i).quantity() - 1
+                );
+                items.set(i, updatedItem);
+            }
+        }
     }
 }

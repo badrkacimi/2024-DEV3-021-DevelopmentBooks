@@ -107,7 +107,6 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
         basketDTO.items().add(new BasketItemDTO(2L, -3));
-        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         InvalidRequestException thrownException = assertThrows(
                 InvalidRequestException.class,
@@ -121,7 +120,6 @@ public class OrderServiceTest {
         BasketDTO basketDTO = new BasketDTO(LocalDateTime.now(), new ArrayList<>());
         basketDTO.items().add(new BasketItemDTO(1L, 2));
         basketDTO.items().add(new BasketItemDTO(1L, 3));
-        when(bookRepository.findById(any())).thenReturn(Optional.of(new Book()));
 
         InvalidRequestException thrownException = assertThrows(
                 InvalidRequestException.class,
