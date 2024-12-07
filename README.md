@@ -1,4 +1,4 @@
-# BADR KACIMI
+# technical details 
 
 * Java 21 Spring boot 3.3.5.RELEASE.
 * TDD approach
